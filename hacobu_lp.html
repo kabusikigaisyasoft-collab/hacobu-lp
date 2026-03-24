@@ -22,6 +22,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content
 .hero-actions{display:flex;gap:16px;align-items:center;flex-wrap:wrap;opacity:0;animation:fadeUp 0.8s 0.8s forwards}
 .btn-primary{background:var(--accent);color:var(--black);border:none;padding:18px 48px;font-family:'Noto Sans JP',sans-serif;font-weight:700;font-size:15px;letter-spacing:2px;cursor:pointer;display:inline-block;text-decoration:none}
 .btn-secondary{background:transparent;color:var(--white);border:2px solid rgba(255,255,255,0.3);padding:16px 32px;font-family:'Noto Sans JP',sans-serif;font-weight:700;font-size:14px;letter-spacing:2px;cursor:pointer;display:inline-block;text-decoration:none}
+.btn-line{background:#06C755;color:var(--white);border:none;padding:18px 48px;font-family:'Noto Sans JP',sans-serif;font-weight:700;font-size:15px;letter-spacing:2px;cursor:pointer;display:inline-block;text-decoration:none}
 .stats-bar{border-top:1px solid rgba(255,255,255,0.08);border-bottom:1px solid rgba(255,255,255,0.08);padding:40px 48px;display:grid;grid-template-columns:repeat(3,1fr)}
 .stat-item{text-align:center;padding:0 32px;border-right:1px solid rgba(255,255,255,0.08)}
 .stat-item:last-child{border-right:none}
@@ -42,9 +43,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content
 .ai-title span{color:var(--accent)}
 .ai-desc{font-size:16px;color:var(--text-muted);max-width:480px;margin:0 auto 48px;line-height:1.8}
 .btn-ai{background:var(--accent);color:var(--black);border:none;padding:20px 60px;font-family:'Noto Sans JP',sans-serif;font-weight:700;font-size:16px;letter-spacing:3px;cursor:pointer;display:inline-block;text-decoration:none}
-.why-section{padding:120px 48px;background:var(--black)}
+.line-section{padding:120px 48px;background:var(--black);text-align:center}
+.line-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,6vw,80px);line-height:1;letter-spacing:2px;margin-bottom:24px}
+.line-title span{color:#06C755}
+.line-desc{font-size:16px;color:var(--text-muted);max-width:480px;margin:0 auto 48px;line-height:1.8}
+.why-section{padding:120px 48px;background:var(--gray)}
 .why-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:64px}
-.why-card{background:var(--gray);padding:56px 48px}
+.why-card{background:var(--black);padding:56px 48px}
 .why-card.accent-card{background:var(--accent);color:var(--black)}
 .why-icon{font-size:40px;margin-bottom:24px}
 .why-title{font-size:20px;font-weight:700;margin-bottom:12px;letter-spacing:1px}
@@ -69,13 +74,13 @@ footer{border-top:1px solid rgba(255,255,255,0.08);padding:48px;display:flex;jus
 .footer-logo{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:4px;color:var(--accent)}
 .footer-copy{font-size:12px;color:var(--text-muted);letter-spacing:1px}
 @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-@media(max-width:768px){nav{padding:20px 24px}.hero{padding:100px 24px 60px}.stats-bar{grid-template-columns:1fr;padding:32px 24px}.stat-item{border-right:none;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:32px}.section{padding:80px 24px}.why-section{padding:80px 24px}.why-grid{grid-template-columns:1fr}.vs-section{padding:80px 24px}.vs-table th,.vs-table td{padding:16px;font-size:13px}.cta-section{padding:100px 24px}.ai-section{padding:80px 24px}footer{padding:32px 24px;flex-direction:column;text-align:center}}
+@media(max-width:768px){nav{padding:20px 24px}.hero{padding:100px 24px 60px}.stats-bar{grid-template-columns:1fr;padding:32px 24px}.stat-item{border-right:none;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:32px}.section{padding:80px 24px}.why-section{padding:80px 24px}.why-grid{grid-template-columns:1fr}.vs-section{padding:80px 24px}.vs-table th,.vs-table td{padding:16px;font-size:13px}.cta-section{padding:100px 24px}.ai-section{padding:80px 24px}.line-section{padding:80px 24px}footer{padding:32px 24px;flex-direction:column;text-align:center}}
 </style>
 </head>
 <body>
 <nav>
 <div class="nav-logo">HACOBU</div>
-<a href="#register" class="nav-cta">集荷を申し込む</a>
+<a href="https://lin.ee/pawA3Ye" target="_blank" class="nav-cta">LINEで相談する</a>
 </nav>
 <section class="hero">
 <div class="hero-bg"></div>
@@ -84,7 +89,7 @@ footer{border-top:1px solid rgba(255,255,255,0.08);padding:48px;display:flex;jus
 <p class="hero-sub">不用品の写真を撮るだけ。査定から集荷まで、HACOBUが全部やります。梱包不要、持ち込み不要。</p>
 <div class="hero-actions">
 <a href="https://hacobu-lp-5z4i.vercel.app/hacobu_satei.html" target="_blank" class="btn-primary">無料でAI査定を試す</a>
-<a href="#register" class="btn-secondary">集荷を申し込む</a>
+<a href="https://lin.ee/pawA3Ye" target="_blank" class="btn-line">LINEで相談する</a>
 </div>
 </section>
 <div class="stats-bar">
@@ -106,6 +111,12 @@ footer{border-top:1px solid rgba(255,255,255,0.08);padding:48px;display:flex;jus
 <h2 class="ai-title">今すぐ<br><span>AI査定を試す</span></h2>
 <p class="ai-desc">写真を撮るだけで、AIが即座に買取額を査定します。登録不要・無料で試せます。</p>
 <a href="https://hacobu-lp-5z4i.vercel.app/hacobu_satei.html" target="_blank" class="btn-ai">🤖 無料でAI査定する</a>
+</section>
+<section class="line-section">
+<div class="section-label">LINE Contact</div>
+<h2 class="line-title">LINEで<br><span>気軽に相談</span></h2>
+<p class="line-desc">査定の相談・集荷の申し込みはLINEで完結。写真を送るだけで査定します。</p>
+<a href="https://lin.ee/pawA3Ye" target="_blank" class="btn-line">💬 LINEで友だち追加する</a>
 </section>
 <section class="why-section">
 <div class="section-label">Why HACOBU</div>
