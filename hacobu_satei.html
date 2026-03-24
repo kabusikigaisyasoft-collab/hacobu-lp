@@ -26,6 +26,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:24px 4
 .photo-slot.required{border-color:rgba(232,255,0,0.6)}
 .photo-slot input{position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;cursor:pointer}
 .photo-slot img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0}
+.slot-content{display:flex;flex-direction:column;align-items:center;justify-content:center}
 .slot-icon{font-size:28px;margin-bottom:8px}
 .slot-label{font-size:11px;color:var(--text-muted);text-align:center;letter-spacing:1px;padding:0 8px}
 .slot-required{font-size:10px;color:var(--accent);margin-top:4px}
@@ -72,9 +73,11 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:24px 4
 .points-list li{padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:14px;display:flex;gap:12px}
 .points-list li:before{content:'▶';color:var(--accent);font-size:10px;margin-top:2px;flex-shrink:0}
 .btn-register{width:100%;background:var(--accent);color:var(--black);border:none;padding:20px;font-family:'Noto Sans JP',sans-serif;font-weight:700;font-size:16px;letter-spacing:3px;cursor:pointer;margin-top:8px}
+.btn-line{width:100%;background:#06C755;color:white;border:none;padding:20px;font-family:'Noto Sans JP',sans-serif;font-weight:700;font-size:16px;letter-spacing:3px;cursor:pointer;margin-top:8px;text-decoration:none;display:block;text-align:center}
 .btn-retry{width:100%;background:transparent;color:var(--white);border:1px solid rgba(255,255,255,0.2);padding:16px;font-family:'Noto Sans JP',sans-serif;font-size:14px;letter-spacing:2px;cursor:pointer;margin-top:8px}
 .error-box{background:rgba(255,0,0,0.1);border:1px solid rgba(255,0,0,0.3);padding:20px;margin-top:16px;display:none}
 .error-text{font-size:14px;color:#ff6b6b}
+.notice-box{background:rgba(232,255,0,0.05);border:1px solid rgba(232,255,0,0.2);padding:16px 20px;margin-bottom:24px;font-size:13px;color:var(--text-muted);line-height:1.7}
 @media(max-width:768px){nav{padding:20px 24px}.hero{padding:60px 24px 40px}.main{padding:0 24px 60px}.info-grid{grid-template-columns:1fr}.price-grid{grid-template-columns:1fr}.detail-grid{grid-template-columns:1fr}}
 </style>
 </head>
@@ -89,6 +92,9 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:24px 4
 <p class="subtitle">正面・型番・傷の3枚を撮るだけ。AIが相場・状態・買取額を即座に判定します。</p>
 </div>
 <div class="main">
+<div class="notice-box">
+⚠️ この査定額は概算です。実際の買取額は集荷時のスタッフによる現物確認後に確定します。AI査定額と実際の買取額に差異が生じる場合があります。
+</div>
 <div class="photo-section">
 <div class="photo-title">📸 商品写真（最大3枚）</div>
 <div class="photo-grid">
@@ -202,7 +208,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:24px 4
 <div class="detail-title">買取額アップのポイント</div>
 <ul class="points-list" id="pointsList"></ul>
 </div>
-<button class="btn-register" onclick="window.open('https://forms.gle/NWEDoZq3zSviecZ18','_blank')">この査定額で集荷を申し込む →</button>
+<a href="https://lin.ee/pawA3Ye" target="_blank" class="btn-line">💬 LINEで集荷を申し込む</a>
 <button class="btn-retry" onclick="resetForm()">別の商品を査定する</button>
 </div>
 </div>
@@ -280,7 +286,23 @@ headers:{'Content-Type':'application/json'},
 body:JSON.stringify({
 model:'claude-sonnet-4-20250514',
 max_tokens:1024,
-system:'あなたはHACOBUのAI査定士です。複数の写真を総合的に分析して正確な査定を行います。必ずJSON形式のみで回答。{"productName":"商品名","grade":"A","marketPrice":10000,"buyPrice":7000,"freeMarketPrice":9000,"conditionRank":"良好","demand":"高い","confidence":"高","comment":"コメント200文字","points":["ポイント1","ポイント2","ポイント3"],"warning":""}',
+system:`あなたはHACOBUの専属AI査定士です。日本の中古品買取市場のプロとして、以下の基準で厳密に査定してください。
+
+【買取価格の基準】
+- HACOBU買取額は市場相場の55〜65%を基準とする（輸送コスト・リスク・利益を考慮）
+- 家電は製造年から1年ごとに15〜20%減価する
+- 10年以上前の家電は買取対象外（0円）
+- ブランド品は真贋リスクを考慮して相場の50〜60%
+- 大型家具は輸送コストを考慮して相場の40〜55%
+- 動作未確認の場合は査定額を30%減
+- 傷・汚れが目立つ場合は査定額を20〜40%減
+
+【売れやすさの基準】
+- 需要が高い：iPhone・Nintendo・ブランド品（LV・グッチ等）・新しい家電
+- 需要が普通：一般家電・一般家具・カメラ
+- 需要が低い：古い家電・ノーブランド家具・大型家具
+
+必ずJSON形式のみで回答。{"productName":"商品名","grade":"A","marketPrice":数字,"buyPrice":数字,"freeMarketPrice":数字,"conditionRank":"状態","demand":"需要","confidence":"信頼度","comment":"コメント200文字","points":["ポイント1","ポイント2","ポイント3"],"warning":"注意または空文字"}`,
 messages:[{role:'user',content:content}]
 })
 });
