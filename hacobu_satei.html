@@ -6,7 +6,7 @@
 <title>HACOBU AI査定</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-:root{--black:#0a0a0a;--white:#f5f5f0;--accent:#E8FF00;--gray:#1a1a1a;--mid:#2a2a2a;--text-muted:#888}
+:root{--black:#0a0a0a;--white:#f5f5f0;--accent:#E8FF00;--gray:#1a1a1a;--text-muted:#888}
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--black);color:var(--white);font-family:'Noto Sans JP',sans-serif;font-weight:300;min-height:100vh}
 nav{display:flex;justify-content:space-between;align-items:center;padding:24px 48px;border-bottom:1px solid rgba(255,255,255,0.05)}
@@ -65,9 +65,6 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:24px 4
 .points-list{list-style:none}
 .points-list li{padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:14px;display:flex;gap:12px}
 .points-list li:before{content:'▶';color:var(--accent);font-size:10px;margin-top:2px;flex-shrink:0}
-.warning-box{background:rgba(255,100,0,0.1);border:1px solid rgba(255,100,0,0.3);padding:20px;margin-bottom:24px}
-.warning-title{font-size:12px;color:#FF6400;letter-spacing:2px;margin-bottom:8px}
-.warning-text{font-size:13px;line-height:1.7;color:rgba(245,245,240,0.7)}
 .btn-register{width:100%;background:var(--accent);color:var(--black);border:none;padding:20px;font-family:'Noto Sans JP',sans-serif;font-weight:700;font-size:16px;letter-spacing:3px;cursor:pointer;margin-top:8px}
 .btn-retry{width:100%;background:transparent;color:var(--white);border:1px solid rgba(255,255,255,0.2);padding:16px;font-family:'Noto Sans JP',sans-serif;font-size:14px;letter-spacing:2px;cursor:pointer;margin-top:8px}
 .error-box{background:rgba(255,0,0,0.1);border:1px solid rgba(255,0,0,0.3);padding:20px;margin-top:16px;display:none}
@@ -176,10 +173,6 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:24px 4
 <div class="detail-title">買取額アップのポイント</div>
 <ul class="points-list" id="pointsList"></ul>
 </div>
-<div class="warning-box" id="warningBox" style="display:none">
-<div class="warning-title">⚠ 注意事項</div>
-<div class="warning-text" id="warningText"></div>
-</div>
 <button class="btn-register" onclick="window.open('https://forms.gle/NWEDoZq3zSviecZ18','_blank')">この査定額で集荷を申し込む →</button>
 <button class="btn-retry" onclick="resetForm()">別の商品を査定する</button>
 </div>
@@ -188,51 +181,87 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:24px 4
 let imageBase64=null,imageMediaType=null;
 const uploadArea=document.getElementById('uploadArea'),fileInput=document.getElementById('fileInput'),previewImg=document.getElementById('previewImg'),uploadContent=document.getElementById('uploadContent');
 fileInput.addEventListener('change',handleFile);
-uploadArea.addEventListener('dragover',e=>{e.preventDefault();uploadArea.classList.add('dragover')});
-uploadArea.addEventListener('dragleave',()=>uploadArea.classList.remove('dragover'));
-uploadArea.addEventListener('drop',e=>{e.preventDefault();uploadArea.classList.remove('dragover');if(e.dataTransfer.files[0])processFile(e.dataTransfer.files[0])});
+uploadArea.addEventListener('dragover',e=>{e.preventDefault()});
+uploadArea.addEventListener('drop',e=>{e.preventDefault();if(e.dataTransfer.files[0])processFile(e.dataTransfer.files[0])});
 function handleFile(e){if(e.target.files[0])processFile(e.target.files[0])}
-function processFile(file){if(!file.type.startsWith('image/')){alert('画像ファイルを選択してください');return}const reader=new FileReader();reader.onload=(e)=>{const dataUrl=e.target.result;imageBase64=dataUrl.split(',')[1];imageMediaType=file.type==='image/heic'?'image/jpeg':file.type;previewImg.src=dataUrl;previewImg.style.display='block';uploadContent.style.display='none'};reader.readAsDataURL(file)}
+function processFile(file){
+const reader=new FileReader();
+reader.onload=(e)=>{
+const dataUrl=e.target.result;
+imageBase64=dataUrl.split(',')[1];
+imageMediaType=file.type||'image/jpeg';
+previewImg.src=dataUrl;
+previewImg.style.display='block';
+uploadContent.style.display='none';
+};
+reader.readAsDataURL(file);
+}
 async function startSatei(){
 if(!imageBase64){alert('まず商品の写真をアップロードしてください');return}
 const btn=document.getElementById('sateiBtn'),loading=document.getElementById('loading'),result=document.getElementById('result'),errorBox=document.getElementById('errorBox');
 btn.disabled=true;loading.style.display='block';result.style.display='none';errorBox.style.display='none';
-const category=document.getElementById('category').value,purchaseYear=document.getElementById('purchaseYear').value,brand=document.getElementById('brand').value,model=document.getElementById('model').value,condition=document.getElementById('condition').value;
-const additionalInfo=[category?`カテゴリ：${category}`:'',purchaseYear?`購入時期：${purchaseYear}`:'',brand?`ブランド・メーカー：${brand}`:'',model?`型番・モデル：${model}`:'',condition?`状態補足：${condition}`:''].filter(Boolean).join('\n');
-const systemPrompt=`あなたはHACOBUの専属AI査定士です。日本国内の中古品買取市場に精通したプロとして正確な査定を行います。ブックオフ、ハードオフ、ゲオ、メルカリ、ヤフオク等の相場を参考に判定。HACOBUの買取額は市場相場の65〜75%を基準とする。必ず以下のJSON形式のみで回答：{"productName":"商品名","grade":"S/A/B/C/D","marketPrice":数字,"buyPrice":数字,"freeMarketPrice":数字,"conditionRank":"状態","demand":"需要","confidence":"信頼度","comment":"コメント200文字","points":["ポイント1","ポイント2","ポイント3"],"warning":"注意または空文字"}`;
+const category=document.getElementById('category').value;
+const purchaseYear=document.getElementById('purchaseYear').value;
+const brand=document.getElementById('brand').value;
+const model=document.getElementById('model').value;
+const condition=document.getElementById('condition').value;
+const info=[category,purchaseYear,brand,model,condition].filter(Boolean).join('、');
 try{
-const response=await fetch('/api/satei',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:systemPrompt,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:imageMediaType,data:imageBase64}},{type:'text',text:`査定してください。${additionalInfo?'\n'+additionalInfo:''}`}]}]})});
+const response=await fetch('/api/satei',{
+method:'POST',
+headers:{'Content-Type':'application/json'},
+body:JSON.stringify({
+model:'claude-sonnet-4-20250514',
+max_tokens:1024,
+system:'あなたはHACOBUのAI査定士です。必ずJSON形式のみで回答してください。余分なテキストは一切含めないでください。回答形式：{"productName":"商品名","grade":"A","marketPrice":10000,"buyPrice":7000,"freeMarketPrice":9000,"conditionRank":"良好","demand":"高い","confidence":"高","comment":"コメント","points":["ポイント1","ポイント2","ポイント3"],"warning":""}',
+messages:[{role:'user',content:[
+{type:'image',source:{type:'base64',media_type:imageMediaType,data:imageBase64}},
+{type:'text',text:'この商品を査定してください。'+(info?'追加情報：'+info:'')+'\n\nJSON形式のみで回答してください。'}
+]}]
+})
+});
 const data=await response.json();
-if(!response.ok)throw new Error(data.error?.message||'APIエラー');
-const text=data.content.map(i=>i.text||'').join('');
-const clean=text.replace(/```json|```/g,'').trim();
-const parsed=JSON.parse(clean);
+if(!response.ok)throw new Error(data.error?.message||'APIエラー：'+response.status);
+const rawText=data.content.map(i=>i.text||'').join('').trim();
+const jsonMatch=rawText.match(/\{[\s\S]*\}/);
+if(!jsonMatch)throw new Error('査定結果の取得に失敗しました');
+const parsed=JSON.parse(jsonMatch[0]);
 displayResult(parsed);
 }catch(err){
 errorBox.style.display='block';
-document.getElementById('errorText').textContent=`査定中にエラーが発生しました。（${err.message}）`;
-}finally{btn.disabled=false;loading.style.display='none'}}
+document.getElementById('errorText').textContent='エラー：'+err.message;
+}finally{btn.disabled=false;loading.style.display='none'}
+}
 function displayResult(data){
 const result=document.getElementById('result');
 const gradeLabel=document.getElementById('gradeLabel');
-gradeLabel.textContent=`${data.grade}ランク`;
-gradeLabel.className=`result-grade grade-${data.grade}`;
-document.getElementById('marketPrice').textContent=formatPrice(data.marketPrice);
-document.getElementById('buyPrice').textContent=formatPrice(data.buyPrice);
-document.getElementById('freeMarketPrice').textContent=formatPrice(data.freeMarketPrice);
-document.getElementById('productName').textContent=data.productName;
-document.getElementById('conditionRank').textContent=data.conditionRank;
-document.getElementById('demand').textContent=data.demand;
-document.getElementById('confidence').textContent=data.confidence;
-document.getElementById('reasonText').textContent=data.comment;
-const pointsList=document.getElementById('pointsList');
-pointsList.innerHTML='';
-(data.points||[]).forEach(p=>{const li=document.createElement('li');li.textContent=p;pointsList.appendChild(li)});
-const warningBox=document.getElementById('warningBox');
-if(data.warning){warningBox.style.display='block';document.getElementById('warningText').textContent=data.warning}else{warningBox.style.display='none'}
-result.style.display='block';result.scrollIntoView({behavior:'smooth'})}
-function formatPrice(num){if(!num||num===0)return'0';return num.toLocaleString('ja-JP')}
-function resetForm(){imageBase64=null;imageMediaType=null;previewImg.style.display='none';previewImg.src='';uploadContent.style.display='block';document.getElementById('fileInput').value='';document.getElementById('category').value='';document.getElementById('purchaseYear').value='';document.getElementById('brand').value='';document.getElementById('model').value='';document.getElementById('condition').value='';document.getElementById('result').style.display='none';document.getElementById('errorBox').style.display='none';window.scrollTo({top:0,behavior:'smooth'})}
+gradeLabel.textContent=(data.grade||'B')+'ランク';
+gradeLabel.className='result-grade grade-'+(data.grade||'B');
+document.getElementById('marketPrice').textContent=fmt(data.marketPrice);
+document.getElementById('buyPrice').textContent=fmt(data.buyPrice);
+document.getElementById('freeMarketPrice').textContent=fmt(data.freeMarketPrice);
+document.getElementById('productName').textContent=data.productName||'-';
+document.getElementById('conditionRank').textContent=data.conditionRank||'-';
+document.getElementById('demand').textContent=data.demand||'-';
+document.getElementById('confidence').textContent=data.confidence||'-';
+document.getElementById('reasonText').textContent=data.comment||'-';
+const pl=document.getElementById('pointsList');
+pl.innerHTML='';
+(data.points||[]).forEach(p=>{const li=document.createElement('li');li.textContent=p;pl.appendChild(li)});
+result.style.display='block';
+result.scrollIntoView({behavior:'smooth'});
+}
+function fmt(n){return(n||0).toLocaleString('ja-JP')}
+function resetForm(){
+imageBase64=null;imageMediaType=null;
+previewImg.style.display='none';previewImg.src='';
+uploadContent.style.display='block';
+document.getElementById('fileInput').value='';
+['category','purchaseYear','brand','model','condition'].forEach(id=>{document.getElementById(id).value=''});
+document.getElementById('result').style.display='none';
+document.getElementById('errorBox').style.display='none';
+window.scrollTo({top:0,behavior:'smooth'});
+}
 </script>
 </body>
 </html>
