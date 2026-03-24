@@ -21,7 +21,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content
 .hero-sub{font-size:clamp(16px,2vw,22px);font-weight:300;color:rgba(245,245,240,0.7);max-width:520px;line-height:1.8;margin-bottom:56px;opacity:0;animation:fadeUp 0.8s 0.6s forwards}
 .hero-actions{display:flex;gap:16px;align-items:center;flex-wrap:wrap;opacity:0;animation:fadeUp 0.8s 0.8s forwards}
 .btn-primary{background:var(--accent);color:var(--black);border:none;padding:18px 48px;font-family:'Noto Sans JP',sans-serif;font-weight:700;font-size:15px;letter-spacing:2px;cursor:pointer;display:inline-block;text-decoration:none}
-.btn-secondary{color:var(--white);font-size:14px;letter-spacing:1px;opacity:0.6;cursor:pointer;border:none;background:none;font-family:'Noto Sans JP',sans-serif}
 .stats-bar{border-top:1px solid rgba(255,255,255,0.08);border-bottom:1px solid rgba(255,255,255,0.08);padding:40px 48px;display:grid;grid-template-columns:repeat(3,1fr)}
 .stat-item{text-align:center;padding:0 32px;border-right:1px solid rgba(255,255,255,0.08)}
 .stat-item:last-child{border-right:none}
@@ -58,21 +57,18 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content
 .cta-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,8vw,100px);line-height:1;letter-spacing:2px;margin-bottom:32px}
 .cta-title span{color:var(--accent)}
 .cta-sub{font-size:16px;color:var(--text-muted);margin-bottom:56px;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.8}
-.cta-form{display:flex;max-width:480px;margin:0 auto 24px}
-.cta-input{flex:1;background:var(--gray);border:1px solid rgba(255,255,255,0.1);border-right:none;padding:18px 24px;color:var(--white);font-family:'Noto Sans JP',sans-serif;font-size:14px;outline:none}
-.cta-submit{background:var(--accent);color:var(--black);border:none;padding:18px 32px;font-family:'Noto Sans JP',sans-serif;font-weight:700;font-size:14px;letter-spacing:1px;cursor:pointer;white-space:nowrap}
-.cta-note{font-size:12px;color:var(--text-muted);letter-spacing:1px}
+.cta-note{font-size:12px;color:var(--text-muted);letter-spacing:1px;margin-top:16px}
 footer{border-top:1px solid rgba(255,255,255,0.08);padding:48px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px}
 .footer-logo{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:4px;color:var(--accent)}
 .footer-copy{font-size:12px;color:var(--text-muted);letter-spacing:1px}
 @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-@media(max-width:768px){nav{padding:20px 24px}.hero{padding:100px 24px 60px}.stats-bar{grid-template-columns:1fr;padding:32px 24px}.stat-item{border-right:none;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:32px}.section{padding:80px 24px}.why-section{padding:80px 24px}.why-grid{grid-template-columns:1fr}.vs-section{padding:80px 24px}.vs-table th,.vs-table td{padding:16px;font-size:13px}.cta-section{padding:100px 24px}.cta-form{flex-direction:column}.cta-input{border-right:1px solid rgba(255,255,255,0.1);border-bottom:none}footer{padding:32px 24px;flex-direction:column;text-align:center}}
+@media(max-width:768px){nav{padding:20px 24px}.hero{padding:100px 24px 60px}.stats-bar{grid-template-columns:1fr;padding:32px 24px}.stat-item{border-right:none;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:32px}.section{padding:80px 24px}.why-section{padding:80px 24px}.why-grid{grid-template-columns:1fr}.vs-section{padding:80px 24px}.vs-table th,.vs-table td{padding:16px;font-size:13px}.cta-section{padding:100px 24px}footer{padding:32px 24px;flex-direction:column;text-align:center}}
 </style>
 </head>
 <body>
 <nav>
 <div class="nav-logo">HACOBU</div>
-<a href="https://docs.google.com/forms/d/e/1FAIpQLScIm_qy3Jsj1ABn3WZ8rui7uVxIvnj4w7gbcdoAE5xNQqFwVw/viewform?usp=header" target="_blank" class="nav-cta">事前登録する</a>
+<a href="#register" class="nav-cta">事前登録する</a>
 </nav>
 <section class="hero">
 <div class="hero-bg"></div>
@@ -80,7 +76,7 @@ footer{border-top:1px solid rgba(255,255,255,0.08);padding:48px;display:flex;jus
 <h1 class="hero-title">写真1枚で、<br><span>手放せる。</span></h1>
 <p class="hero-sub">不用品の写真を撮るだけ。査定から集荷まで、HACOBUが全部やります。梱包不要、持ち込み不要。</p>
 <div class="hero-actions">
-<a href="https://docs.google.com/forms/d/e/1FAIpQLScIm_qy3Jsj1ABn3WZ8rui7uVxIvnj4w7gbcdoAE5xNQqFwVw/viewform?usp=header" target="_blank" class="btn-primary">無料で事前登録する</a>
+<a href="#register" class="btn-primary">無料で事前登録する</a>
 </div>
 </section>
 <div class="stats-bar">
@@ -125,9 +121,8 @@ footer{border-top:1px solid rgba(255,255,255,0.08);padding:48px;display:flex;jus
 <div class="cta-bg"></div>
 <h2 class="cta-title">まず、写真を<br><span>撮るだけ。</span></h2>
 <p class="cta-sub">事前登録いただいた方には、サービス開始時に優先案内＋初回査定アップ特典をご用意しています。</p>
-<div class="cta-form">
-<input type="email" class="cta-input" placeholder="メールアドレスを入力">
-<button class="cta-submit" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLScIm_qy3Jsj1ABn3WZ8rui7uVxIvnj4w7gbcdoAE5xNQqFwVw/viewform?usp=header','_blank')">無料登録</button>
+<div style="max-width:480px;margin:0 auto;">
+<iframe src="https://docs.google.com/forms/d/e/1FAIpQLScIm_qy3Jsj1ABn3WZ8rui7uVxIvnj4w7gbcdoAE5xNQqFwVw/viewform?embedded=true" width="100%" height="400" frameborder="0" marginheight="0" marginwidth="0" style="border-radius:4px;">読み込んでいます…</iframe>
 </div>
 <p class="cta-note">登録無料 · いつでも解除可能</p>
 </section>
